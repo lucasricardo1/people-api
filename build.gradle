@@ -20,7 +20,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.projectlombok:lombok:1.18.28'
 	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.3'
 
+
+	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

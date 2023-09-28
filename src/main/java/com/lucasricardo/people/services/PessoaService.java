@@ -2,11 +2,13 @@ package com.lucasricardo.people.services;
 
 import com.lucasricardo.people.dtos.PessoaDTO;
 import com.lucasricardo.people.entities.PessoaEntity;
+import com.lucasricardo.people.exceptions.ApiException;
 import com.lucasricardo.people.mappers.EnderecoMapper;
 import com.lucasricardo.people.mappers.PessoaMapper;
 import com.lucasricardo.people.repositories.EnderecoRepository;
 import com.lucasricardo.people.repositories.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,12 +41,19 @@ public class PessoaService {
             return pessoaMapper.toDTO(pessoaRepository.save(pessoaEntity.get()));
 
         }
-        else return new PessoaDTO();
+        else throw new ApiException(HttpStatus.NOT_FOUND.toString(),
+                "Pessoa não encontrada com o ID: " + pessoaDTO.getId(), HttpStatus.NOT_FOUND);
     }
 
     public PessoaDTO consultarPessoa(Long id){
-        return pessoaRepository.findById(id).isPresent() ?
-                pessoaMapper.toDTO(pessoaRepository.findById(id).get()) : new PessoaDTO() ;
+        Optional<PessoaEntity> pessoaEntity = pessoaRepository.findById(id);
+
+        if (pessoaEntity.isPresent()) {
+            return pessoaMapper.toDTO(pessoaEntity.get());
+        } else {
+            throw new ApiException(HttpStatus.NOT_FOUND.toString(),
+                    "Pessoa não encontrada com o ID: " + id, HttpStatus.NOT_FOUND);
+        }
     }
 
     public List<PessoaDTO> consultarPessoas(){
