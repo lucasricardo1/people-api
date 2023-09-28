@@ -5,12 +5,15 @@ import com.lucasricardo.people.entities.PessoaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface PessoaMapper {
 
-    @Mapping(target = "enderecos", ignore = true)
     PessoaDTO toDTO(PessoaEntity pessoaEntity);
 
     PessoaEntity toEntity(PessoaDTO pessoaDTO);
+
+    List<PessoaDTO> listToDTO(List<PessoaEntity> pessoaEntities);
 }
 

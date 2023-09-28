@@ -2,13 +2,15 @@ package com.lucasricardo.people.entities;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Data
-public class PessoaEntity {
+public class PessoaEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

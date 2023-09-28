@@ -9,4 +9,5 @@ public class EnderecoDTO {
     private String cep;
     private String numero;
     private String cidade;
+    private boolean favorito;
 }

@@ -1,6 +1,5 @@
 package com.lucasricardo.people.services;
 
-import com.lucasricardo.people.dtos.EnderecoDTO;
 import com.lucasricardo.people.dtos.PessoaDTO;
 import com.lucasricardo.people.entities.PessoaEntity;
 import com.lucasricardo.people.mappers.EnderecoMapper;
@@ -10,25 +9,21 @@ import com.lucasricardo.people.repositories.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PessoaService {
 
-    @Autowired
-    PessoaRepository pessoaRepository;
+    private final PessoaRepository pessoaRepository;
+
+    private final PessoaMapper pessoaMapper;
 
     @Autowired
-    EnderecoRepository enderecoRepository;
-
-    @Autowired
-    PessoaMapper pessoaMapper;
-
-    @Autowired
-    EnderecoMapper enderecoMapper;
+    public PessoaService(PessoaRepository pessoaRepository,EnderecoRepository enderecoRepository ,PessoaMapper pessoaMapper, EnderecoMapper enderecoMapper) {
+        this.pessoaMapper = pessoaMapper;
+        this.pessoaRepository = pessoaRepository;
+    }
 
     public PessoaDTO criarPessoa(PessoaDTO pessoaDTO){
         return pessoaMapper.toDTO(pessoaRepository.save(pessoaMapper.toEntity(pessoaDTO)));
@@ -52,19 +47,8 @@ public class PessoaService {
                 pessoaMapper.toDTO(pessoaRepository.findById(id).get()) : new PessoaDTO() ;
     }
 
-    public PessoaDTO criarEnderecoParaPessoa(Long idPessoa, EnderecoDTO enderecoDTO){
-        if(pessoaRepository.findById(idPessoa).isPresent()){
-
-            PessoaEntity pessoaEntity = pessoaRepository.findById(idPessoa).get();
-            pessoaEntity.getEnderecos().add(enderecoMapper.toEntity(enderecoDTO));
-
-            return pessoaMapper.toDTO(pessoaRepository.save(pessoaEntity));
-
-        } else return new PessoaDTO();
+    public List<PessoaDTO> consultarPessoas(){
+        return pessoaMapper.listToDTO(pessoaRepository.findAll());
     }
 
-    public List<EnderecoDTO> consultarEnderecos(Long idPessoa){
-        return pessoaRepository.findById(idPessoa).isPresent() ?
-                enderecoMapper.toListDTO(pessoaRepository.findById(idPessoa).get().getEnderecos()) : new ArrayList<>();
-    }
 }
