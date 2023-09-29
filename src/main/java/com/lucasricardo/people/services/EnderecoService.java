@@ -45,7 +45,9 @@ public class EnderecoService {
 
             return pessoaMapper.toDTO(pessoaRepository.save(pessoaEntity));
 
-        } else return new PessoaDTO();
+        } else throw new ApiException(HttpStatus.NOT_FOUND.toString(),
+                "Pessoa não encontrados com o ID: " + idPessoa, HttpStatus.NOT_FOUND);
+
     }
 
     public List<EnderecoDTO> consultarEnderecos(Long idPessoa){
